@@ -6,6 +6,7 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
+  GraphQLList,
 } = graphql;
 
 // dummy data
@@ -51,6 +52,16 @@ const AuthorType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     age: { type: GraphQLInt },
+    books: {
+      // Not BookType Since it retrieves a single Book , Author Books gives list of Books written by the Author
+      type: new GraphQLList(BookType),
+      resolve: (parent, args) => {
+        const authorId = parent.id;
+        return bookData.filter(
+          (currentBook) => currentBook.authorId === authorId
+        );
+      },
+    },
   }),
 });
 
