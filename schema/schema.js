@@ -1,35 +1,64 @@
 const graphql = require("graphql");
 
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLSchema,
+} = graphql;
 
-const dummyData = require("../data/data.json");
-const bookData = dummyData.books;
+// dummy data
+var bookData = [
+  { name: "Name of the Wind", genre: "Fantasy", id: "1", authorId: "1" },
+  { name: "The Final Empire", genre: "Fantasy", id: "2", authorId: "2" },
+  { name: "The Long Earth", genre: "Sci-Fi", id: "3", authorId: "3" },
+];
+
+var authorsData = [
+  { name: "Patrick Rothfuss", age: 44, id: "1" },
+  { name: "Brandon Sanderson", age: 42, id: "2" },
+  { name: "Terry Pratchett", age: 66, id: "3" },
+];
 
 const BookType = new GraphQLObjectType({
   name: "Book",
-  description: "Loreum Epsum",
+  description: "Book Data Fields",
   fields: () => ({
-    isbn: { type: GraphQLString },
-    title: { type: GraphQLString },
-    subtitle: { type: GraphQLString },
-    author: { type: GraphQLString },
-    published: { type: GraphQLString },
-    publisher: { type: GraphQLString },
-    pages: { type: GraphQLInt },
-    description: { type: GraphQLString },
-    website: { type: GraphQLString },
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    genre: { type: GraphQLString },
+    authorId: { type: GraphQLString },
+  }),
+});
+const AuthorType = new GraphQLObjectType({
+  name: "Author",
+  description: "Author Data Fields",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    age: { type: GraphQLString },
   }),
 });
 
 const RootQuery = new GraphQLObjectType({
   name: "RootType",
+  description: "Main Tree Node",
   fields: {
     book: {
       type: BookType,
-      args: { isbn: { type: GraphQLString } },
+      args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        const bookIsbn = args.isbn;
-        return bookData.find((data) => data.isbn === bookIsbn);
+        const bookId = args.id;
+        return bookData.find((data) => data.id === bookId);
+      },
+    },
+    author: {
+      type: AuthorType,
+      args: { id: { type: GraphQLID } },
+      resolve(parent, args) {
+        const authorId = args.id;
+        return authorsData.find((data) => data.id === authorId);
       },
     },
   },
