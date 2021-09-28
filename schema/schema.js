@@ -12,7 +12,10 @@ const {
 var bookData = [
   { name: "Name of the Wind", genre: "Fantasy", id: "1", authorId: "1" },
   { name: "The Final Empire", genre: "Fantasy", id: "2", authorId: "2" },
+  { name: "The Hero of Ages", genre: "Fantasy", id: "4", authorId: "2" },
   { name: "The Long Earth", genre: "Sci-Fi", id: "3", authorId: "3" },
+  { name: "The Colour of Magic", genre: "Fantasy", id: "5", authorId: "3" },
+  { name: "The Light Fantastic", genre: "Fantasy", id: "6", authorId: "3" },
 ];
 
 var authorsData = [
@@ -28,7 +31,17 @@ const BookType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     genre: { type: GraphQLString },
-    authorId: { type: GraphQLString },
+    author: {
+      type: AuthorType,
+      resolve: (parent, args) => {
+        // parent retrieves the current node
+        console.log(parent);
+        const authorIdOfBook = parent.authorId;
+        return authorsData.find(
+          (currentAuthor) => currentAuthor.id === authorIdOfBook
+        );
+      },
+    },
   }),
 });
 const AuthorType = new GraphQLObjectType({
@@ -37,7 +50,7 @@ const AuthorType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    age: { type: GraphQLString },
+    age: { type: GraphQLInt },
   }),
 });
 
@@ -48,17 +61,19 @@ const RootQuery = new GraphQLObjectType({
     book: {
       type: BookType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
+      resolve: (parent, args) => {
         const bookId = args.id;
-        return bookData.find((data) => data.id === bookId);
+        return bookData.find((currentBook) => currentBook.id === bookId);
       },
     },
     author: {
       type: AuthorType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
+      resolve: (parent, args) => {
         const authorId = args.id;
-        return authorsData.find((data) => data.id === authorId);
+        return authorsData.find(
+          (currentAuthor) => currentAuthor.id === authorId
+        );
       },
     },
   },
