@@ -120,7 +120,8 @@ const Mutations = new GraphQLObjectType({
           name: args.name,
           age: args.age,
         });
-        return author.save();
+        const savedAuthor = author.save(); // saving author here and store it in variable
+        return savedAuthor;
       },
     },
     addAnBook: {
