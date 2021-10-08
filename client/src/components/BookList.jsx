@@ -1,7 +1,53 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
-import { getAllBooks } from "../queries";
+import { deleteAnBook, getAllBooks } from "../queries";
 import BookDetails from "./BookDetails";
+
+const RenderList = (props) => {
+  const { setSelectedBook = () => {}, book } = props;
+  const [deleteConfirmation, setDeleteConfirmation] = React.useState(false);
+  const [deleteAnBookFuntion] = useMutation(deleteAnBook);
+
+  return (
+    <li
+      key={book.id}
+      onClick={() => {
+        setSelectedBook(book.id);
+      }}
+    >
+      {deleteConfirmation ? (
+        <span
+          onClick={(e) => {
+            deleteAnBookFuntion({
+              variables: {
+                id: book.id,
+              },
+              refetchQueries: [getAllBooks],
+            });
+            setDeleteConfirmation(false);
+          }}
+        >
+          Wanna Trash 🗑
+        </span>
+      ) : (
+        <>
+          {book.name}
+          <span
+            className="close-icon"
+            onClick={() => {
+              setDeleteConfirmation(true);
+              setTimeout(() => {
+                setDeleteConfirmation(false);
+              }, 5000);
+            }}
+          >
+            x
+          </span>
+        </>
+      )}
+    </li>
+  );
+};
 
 const BookList = () => {
   const [selectedBook, setSelectedBook] = React.useState("");
@@ -14,18 +60,9 @@ const BookList = () => {
       <div className="booklist">
         <h1>Books List</h1>
         <ul>
-          {bookData.map((book) => {
-            return (
-              <li
-                key={book.id}
-                onClick={() => {
-                  setSelectedBook(book.id);
-                }}
-              >
-                {book.name}
-              </li>
-            );
-          })}
+          {bookData.map((book) => (
+            <RenderList book={book} />
+          ))}
         </ul>
       </div>
       <BookDetails bookData={bookData} bookId={selectedBook} />

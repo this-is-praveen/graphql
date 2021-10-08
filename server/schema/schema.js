@@ -107,7 +107,8 @@ const RootQuery = new GraphQLObjectType({
 });
 
 const Mutations = new GraphQLObjectType({
-  name: "Mutations_Test",
+  name: "Mutations_Funtions",
+  description: "Where we declare the api functions like REST",
   fields: {
     addAnAuthor: {
       type: AuthorType,
@@ -139,6 +140,15 @@ const Mutations = new GraphQLObjectType({
         });
         const savedBook = book.save();
         return savedBook;
+      },
+    },
+    deleteAnBook: {
+      type: BookType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: (parent, args) => {
+        return Book.findByIdAndDelete(args.id);
       },
     },
   },

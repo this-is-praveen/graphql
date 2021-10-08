@@ -33,12 +33,18 @@ body::-webkit-scrollbar-thumb {
   justify-content: center;
 }
 .book-pane .book-details {
-  flex: 0 0 30%;
+  flex: 0 0 27.5%;
   padding: 1em;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
+  max-height: 100%;
+}
+.book-pane .book-details ul {
+  margin-top: 0.5rem;
+  margin-left: 2.5rem;
 }
 .book-details p {
   font-size: 1.25em;
@@ -64,10 +70,12 @@ body::-webkit-scrollbar-thumb {
   margin: 0;
   padding: 1em;
 }
-.booklist ul::-webkit-scrollbar {
+.booklist ul::-webkit-scrollbar,
+.book-details::-webkit-scrollbar {
   width: 0.25em;
 }
-.booklist ul::-webkit-scrollbar-thumb {
+.booklist ul::-webkit-scrollbar-thumb,
+.book-details::-webkit-scrollbar-thumb {
   background-color: rgb(255, 149, 110, 0.75);
   outline: 1px solid rgb(255, 149, 110);
 }
@@ -76,6 +84,14 @@ body::-webkit-scrollbar-thumb {
   padding: 0.5em 1em;
   font-size: 1.25em;
   font-weight: 600;
+}
+.booklist li span {
+  color: red;
+}
+.booklist li .close-icon {
+  color: red;
+  padding-left: 0.5em;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .booklist li:hover,
 .booklist li:focus {

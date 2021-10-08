@@ -5,19 +5,19 @@ const BookDetails = (props) => {
   //   if (error) return <p>Error :(</p>;
   const { bookData, bookId } = props;
   const selectedBook = bookData.find((book) => book.id === bookId);
-  console.log("selectedBook ", selectedBook);
   if (bookId) {
     return (
       <div className="book-details">
         <h1>Selected Book</h1>
         <p>Book : {selectedBook.name}</p>
+        <p>ID : {selectedBook.id}</p>
         <p>Genre : {selectedBook.genre}</p>
         <p>
           Author Name : {selectedBook?.author?.name} (
           {selectedBook?.author?.age})
         </p>
+        <span>Authors other work</span>
         <ul>
-          <span>Authors other work</span>
           {selectedBook?.author?.books.map((bookName) => {
             return bookName?.name === selectedBook.name ? (
               <></>
