@@ -56,17 +56,20 @@ const BookList = () => {
   if (error) return <p>Error :(</p>;
   const bookData = data.books;
   return (
-    <div className="book-pane">
-      <div className="booklist">
-        <h1>Books List</h1>
-        <ul>
-          {bookData.map((book) => (
-            <RenderList book={book} />
-          ))}
-        </ul>
+    <>
+      Prawin
+      <div className="book-pane">
+        <div className="booklist">
+          <h1>Books List</h1>
+          <ul>
+            {bookData.map((book) => (
+              <RenderList setSelectedBook={setSelectedBook} book={book} />
+            ))}
+          </ul>
+        </div>
+        <BookDetails bookData={bookData} bookId={selectedBook} />
       </div>
-      <BookDetails bookData={bookData} bookId={selectedBook} />
-    </div>
+    </>
   );
 };
 export default BookList;
